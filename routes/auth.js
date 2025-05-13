@@ -19,22 +19,25 @@ const writeUsers = (users) => {
 
 // 注册接口
 router.post('/register', async (req, res) => {
-  const { username, password, avatar } = req.body;
-  if (!username || !password || !avatar) {
-    return res.status(400).json({ error: '缺少字段' });
+  const { accountNumber, password, username } = req.body;
+
+  if (!accountNumber || !password || !username) {
+    return res.status(400).json({ error: '缺少字段（accountNumber、password、username）' });
   }
 
   const users = readUsers();
-  if (users.find(u => u.username === username)) {
-    return res.status(409).json({ error: '用户名已存在' });
+  if (users.find(u => u.accountNumber === accountNumber)) {
+    return res.status(409).json({ error: '账号已存在' });
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
+
   const newUser = {
     id: Date.now(),
+    accountNumber,
     username,
     passwordHash,
-    avatar
+    avatar: `https://i.pravatar.cc/150?u=${accountNumber}` // 自动生成头像
   };
 
   users.push(newUser);
@@ -44,19 +47,9 @@ router.post('/register', async (req, res) => {
 });
 
 // 登录接口
-router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  const users = readUsers();
-  const user = users.find(u => u.username === username);
-
-  if (!user) return res.status(401).json({ error: '用户不存在' });
-  const valid = await bcrypt.compare(password, user.passwordHash);
-  if (!valid) return res.status(401).json({ error: '密码错误' });
-
-  const token = signToken({ id: user.id });
-  const { passwordHash, ...userData } = user;
-  res.json({ token, user: userData });
-});
+if (!user) return res.status(401).json({ error: '账号不存在' });
+const valid = await bcrypt.compare(password, user.passwordHash);
+if (!valid) return res.status(401).json({ error: '密码错误' });
 
 // 获取当前用户信息
 router.get('/me', (req, res) => {
