@@ -50,13 +50,16 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { accountNumber, password } = req.body;
 
-  console.log('Received login attempt:', { accountNumber, password });
+  console.log('Received login attempt:', { accountNumber, password });  //打印调试
 
   const users = readUsers();
   const user = users.find(u => u.accountNumber === accountNumber);
   if (!user) return res.status(401).json({ error: '账号不存在' });
 
   const valid = await bcrypt.compare(password, user.passwordHash);
+
+  console.log('bcrypt compare result:', valid);                         //打印调试
+
   if (!valid) return res.status(401).json({ error: '密码错误' });
 
   const token = signToken({ id: user.id });
