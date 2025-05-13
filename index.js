@@ -6,12 +6,12 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 app.use(cors({
-  origin: 'https://anime-tau-ochre.vercel.app', // 前端地址
+  origin: '*', // 前端地址
   credentials: true
 }));
 app.use(express.json());
 
-app.use('/api', authRoutes);
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
