@@ -48,8 +48,10 @@ router.post('/register', async (req, res) => {
 
 // 登录接口
 router.post('/login', async (req, res) => {
-  const { accountNumber, password } = req.body;
 
+  console.log('Received login attempt:', { accountNumber, password });
+
+  const { accountNumber, password } = req.body;
   const users = readUsers();
   const user = users.find(u => u.accountNumber === accountNumber);
   if (!user) return res.status(401).json({ error: '账号不存在' });
