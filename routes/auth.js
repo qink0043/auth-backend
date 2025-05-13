@@ -47,9 +47,21 @@ router.post('/register', async (req, res) => {
 });
 
 // 登录接口
-if (!user) return res.status(401).json({ error: '账号不存在' });
-const valid = await bcrypt.compare(password, user.passwordHash);
-if (!valid) return res.status(401).json({ error: '密码错误' });
+router.post('/login', async (req, res) => {
+  const { accountNumber, password } = req.body;
+
+  const users = readUsers();
+  const user = users.find(u => u.accountNumber === accountNumber);
+  if (!user) return res.status(401).json({ error: '账号不存在' });
+
+  const valid = await bcrypt.compare(password, user.passwordHash);
+  if (!valid) return res.status(401).json({ error: '密码错误' });
+
+  const token = signToken({ id: user.id });
+  const { passwordHash, ...userData } = user;
+
+  res.json({ token, user: userData });
+});
 
 // 获取当前用户信息
 router.get('/me', (req, res) => {
