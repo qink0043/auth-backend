@@ -1,6 +1,6 @@
 const express = require('express')
 const axios = require('axios')
-const PQueue = require('p-queue');
+const PQueue = require('p-queue').default
 
 const router = express.Router()
 
