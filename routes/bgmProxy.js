@@ -7,8 +7,6 @@ const router = express.Router()
 // 请求队列
 const queue = new PQueue({ interval: 1000, intervalCap: 3 }); // 每秒最多3个请求
 
-router.use(bangumiLimiter)
-
 //代理bangumi接口
 router.get('/search', async (req, res) => {
   const { q, type } = req.query
