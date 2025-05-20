@@ -1,6 +1,19 @@
 const express = require('express')
 const axios = require('axios')
+const rateLimit = require('exporess-rate-Limit')
+
 const router = express.Router()
+
+// 请求频率限制中间件
+const bangumiLimiter = rateLimit({
+  windowMs: 1000, // 1 秒
+  max: 3, // 最多 3 次请求
+  message: {
+    error: '请求过于频繁，请稍后再试'
+  }
+});
+
+router.use(bangumiLimiter)
 
 //代理bangumi接口
 router.get('/search', async (req, res) => {
