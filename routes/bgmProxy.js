@@ -1,6 +1,6 @@
 const express = require('express')
 const axios = require('axios')
-const rateLimit = require('exporess-rate-Limit')
+const rateLimit = require('express-rate-Limit')
 
 const router = express.Router()
 
