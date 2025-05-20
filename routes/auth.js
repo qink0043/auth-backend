@@ -58,14 +58,12 @@ router.post('/login', async (req, res) => {
 
   const valid = await bcrypt.compare(password, user.passwordHash);
 
-  console.log('bcrypt compare result:', valid);                         //打印调试
-
   if (!valid) return res.status(401).json({ error: '密码错误' });
 
   const token = signToken({ id: user.id });
   const { passwordHash, ...userData } = user;
 
-  res.json({ token, user: userData });
+  res.json({ token });
 });
 
 // 获取当前用户信息
