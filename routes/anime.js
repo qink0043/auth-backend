@@ -118,14 +118,22 @@ router.get('/video', async (req, res) => {
 })
 
 router.get('/search', async (req, res) => {
-  const searchHtml = await getHtml('http://www.yinghuacd.com/search/' + req.query.keyword + '/')
-  const searchData = await getSearchData(searchHtml)
+  const searchHtml = await getHtml('http://www.yinghuacd.com/search/' + req.query.keyword + '/').catch(() => {
+    console.log('获取searchHtml错误');
+  })
+  const searchData = await getSearchData(searchHtml).catch(() => {
+    console.log('获取searchData错误');
+  })
   res.send(searchData)
 })
 
 router.get('/detail', async (req, res) => {
-  const detailHtml = await getHtml('http://www.iyinghua.io' + req.query.url)
-  const detailData = await getAnimeDetail(detailHtml)
+  const detailHtml = await getHtml('http://www.iyinghua.io' + req.query.url).catch(() => {
+    console.log('获取detailHtml错误');
+  })
+  const detailData = await getAnimeDetail(detailHtml).catch(() => {
+    console.log('获取detailData错误');
+  })
   res.send(detailData)
 })
 
