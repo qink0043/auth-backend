@@ -112,7 +112,7 @@ const searchUrl = "http://www.yinghuacd.com/search/海贼王/"
 
 
 router.get('/video', async (req, res) => {
-  const videoUrl = 'http://www.iyinghua.io' + res.query.url
+  const videoUrl = 'http://www.iyinghua.io' + req.query.url
   const videoHtml = await getHtml(videoUrl).catch(() => {
     console.log('videoHtml错误', videoHtml);
   })
