@@ -39,6 +39,16 @@ class AnimeDetailBean {
   }
 }
 
+export default class EpisodeBean {
+  constructor(
+    name,
+    url
+  ) {
+    this.name = name
+    this.url = url
+  }
+}
+
 async function getHtml(url) {
   let { data: html } = await axios.get(url)
   return html
@@ -57,6 +67,17 @@ function getAnimeList(source) {
   return animeList
 }
 
+function getAnimeEpisodes($) {
+  let dramaElements = $('div.movurl > ul > li')
+  let episodes = []
+  dramaElements.each((i, el) => {
+    let name = $(el).find('a').text()
+    let url = $(el).find('a').attr('href') ?? ""
+    episodes.push(new EpisodeBean(name, url))
+  })
+  return episodes
+}
+
 async function getAnimeDetail(source) {
   const $ = cheerio.load(source)
   let title = $('h1').text()
@@ -71,8 +92,7 @@ async function getAnimeDetail(source) {
     tags.push(tag)
   })
   let episodes = getAnimeEpisodes($)
-  let relatedAnimes = getRelatedAnimes($)
-  return new AnimeDetailBean(new AnimeBean(title, img, ''), desc, score, tags, updateTime, episodes, relatedAnimes)
+  return new AnimeDetailBean(new AnimeBean(title, img, ''), desc, score, tags, updateTime, episodes)
 }
 
 async function getSearchData(source) {
