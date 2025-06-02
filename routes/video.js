@@ -19,6 +19,26 @@ class AnimeBean {
   }
 }
 
+class AnimeDetailBean {
+  constructor(
+    anime,
+    desc,
+    score,
+    tags,
+    updateTime,
+    episode,
+    relatedAnimes
+  ) {
+    this.anime = anime
+    this.desc = desc
+    this.score = score
+    this.tags = tags
+    this.updateTime = updateTime
+    this.episode = episode
+    this.relatedAnimes = relatedAnimes
+  }
+}
+
 async function getHtml(url) {
   let { data: html } = await axios.get(url)
   return html
@@ -35,6 +55,24 @@ function getAnimeList(source) {
     animeList.push(new AnimeBean(title, img, url))
   })
   return animeList
+}
+
+async function getAnimeDetail(source) {
+  const $ = cheerio.load(source)
+  let title = $('h1').text()
+  let desc = $('div.info').text()
+  let score = $('div.score > em').text()
+  let img = $('div.thumb > img').attr('src') ?? ''
+  let updateTime = $('div.sinfo > p').last().text()
+  let tags = []
+  let tagInfoList = $("div.sinfo > span").filter((i, el,) => (i != 5 && i != 3))
+  tagInfoList.each((i, el) => {
+    let tag = $(el).find('a').text().toUpperCase()
+    tags.push(tag)
+  })
+  let episodes = getAnimeEpisodes($)
+  let relatedAnimes = getRelatedAnimes($)
+  return new AnimeDetailBean(new AnimeBean(title, img, ''), desc, score, tags, updateTime, episodes, relatedAnimes)
 }
 
 async function getSearchData(source) {
@@ -63,6 +101,12 @@ router.get('/search', async (req, res) => {
   const searchHtml = await getHtml('http://www.yinghuacd.com/search/' + req.query.keyword + '/')
   const searchData = await getSearchData(searchHtml)
   res.send(searchData)
+})
+
+router.get('/detail', async (req, res) => {
+  const detailHtml = await getHtml('http://www.iyinghua.io' + req.query.url)
+  const detailData = await getAnimeDetail(detailHtml)
+  res.send(detailData)
 })
 
 module.exports = router;
