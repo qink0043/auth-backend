@@ -112,6 +112,7 @@ const searchUrl = "http://www.yinghuacd.com/search/海贼王/"
 
 
 router.get('/video', async (req, res) => {
+  const videoUrl = 'http://www.iyinghua.io' + res.query.url
   const videoHtml = await getHtml(videoUrl)
   const url = await getVideoUrl(videoHtml)
   res.send({ url: 'https://tup.iyinghua.com/?vid=' + url + '$mp4' })
@@ -130,7 +131,9 @@ router.get('/search', async (req, res) => {
 
 router.get('/detail', async (req, res) => {
   const detailUrl = 'http://www.iyinghua.io' + req.query.url
+
   const detailHtml = await getHtml(detailUrl).catch(() => {
+    console.log(detailUrl);
     console.log('获取detailHtml错误', detailHtml);
   })
   const detailData = await getAnimeDetail(detailHtml).catch(() => {
