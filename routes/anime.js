@@ -39,7 +39,7 @@ class AnimeDetailBean {
   }
 }
 
-export default class EpisodeBean {
+class EpisodeBean {
   constructor(
     name,
     url

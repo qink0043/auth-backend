@@ -1,7 +1,7 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const fs = require('fs');
-const path = require('path');
+const express = require('express')
+const bcrypt = require('bcrypt')
+const fs = require('fs')
+const path = require('path')
 const { signToken, verifyToken } = require('../utils/jwt');
 
 const router = express.Router();

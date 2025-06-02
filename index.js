@@ -4,7 +4,7 @@ require('dotenv').config()
 
 const authRoutes = require('./routes/auth')
 const bgmProxyRoutes = require('./routes/bgmProxy')
-const videoRoutes = require('./routes/video.js')
+const animeRoutes = require('./routes/anime.js')
 
 const app = express()
 app.use(cors({
@@ -15,7 +15,7 @@ app.use(express.json())
 
 app.use('/api/user', authRoutes)
 app.use('/api/bgm', bgmProxyRoutes)
-app.use('/api/anime', videoRoutes)
+app.use('/api/anime', animeRoutes)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
