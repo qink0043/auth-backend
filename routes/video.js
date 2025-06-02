@@ -60,7 +60,7 @@ router.get('/video', async (req, res) => {
 })
 
 router.get('/search', async (req, res) => {
-  const searchHtml = await getHtml('http://www.yinghuacd.com/search/' + req.body.keyword)
+  const searchHtml = await getHtml('http://www.yinghuacd.com/search/' + req.query.keyword + '/')
   const searchData = await getSearchData(searchHtml)
   res.send(searchData)
 })
