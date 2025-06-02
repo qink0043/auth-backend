@@ -115,7 +115,7 @@ router.get('/video', async (req, res) => {
   const videoUrl = 'http://www.iyinghua.io' + res.query.url
   const videoHtml = await getHtml(videoUrl)
   const url = await getVideoUrl(videoHtml)
-  res.send({ url: 'https://tup.iyinghua.com/?vid=' + url + '$mp4' })
+  res.send('https://tup.iyinghua.com/?vid=' + url + '$mp4')
 })
 
 router.get('/search', async (req, res) => {
