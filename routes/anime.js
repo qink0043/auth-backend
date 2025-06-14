@@ -111,17 +111,6 @@ const videoUrl = 'http://www.iyinghua.io/v/5989-2.html'
 const searchUrl = "http://www.yinghuacd.com/search/海贼王/"
 
 
-router.get('/video', async (req, res) => {
-  const videoUrl = 'http://www.iyinghua.io' + req.query.url
-  const videoHtml = await getHtml(videoUrl).catch(() => {
-    console.log('videoHtml错误', videoHtml);
-  })
-  const url = await getVideoUrl(videoHtml).catch(() => {
-    console.log('url错误', url);
-  })
-  res.send('https://tup.iyinghua.com/?vid=' + url + '$mp4')
-})
-
 router.get('/search', async (req, res) => {
   const searchUrl = 'http://www.yinghuacd.com/search/' + req.query.keyword + '/'
   const searchHtml = await getHtml(searchUrl).catch(() => {
@@ -144,6 +133,23 @@ router.get('/detail', async (req, res) => {
     console.log('获取detailData错误', detailData);
   })
   res.send(detailData)
+})
+
+router.get('/video', async (req, res) => {
+  const videoUrl = 'http://www.iyinghua.io' + req.query.url
+  const videoHtml = await getHtml(videoUrl).catch(() => {
+    console.log('videoHtml错误', videoHtml);
+  })
+  const url = await getVideoUrl(videoHtml).catch(() => {
+    console.log('url错误', url);
+  })
+  res.send('https://tup.iyinghua.com/?vid=' + url + '$mp4')
+})
+
+router.get('/demo', async (req, res) => {
+  const videoUrl = 'https://www.233dm.com/anime/9894b11187bd24abe69c4d78/play/3/1.html'
+  const videoHtml = await getHtml(videoUrl)
+  res.send(videoHtml)
 })
 
 module.exports = router;

@@ -1,15 +1,20 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
+const SECRET_KEY = require("../config/jwt");
 
-const signToken = (payload) => {
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '2h' });
-};
-
-const verifyToken = (token) => {
-  try {
-    return jwt.verify(token, process.env.JWT_SECRET);
-  } catch (err) {
-    return null;
+function verifyToken(req, res, next) {
+  const token = req.headers["authorization"];
+  console.log("verifyToken执行", token);
+  if (!token) {
+    return res.status(403).send({ msg: "token 为空" });
   }
-};
+  console.log(SECRET_KEY, "----SECRET_KEY");
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("token 未授权");
+    }
+    req.userId = decoded.id;
+  });
+  next();
+}
+module.exports = verifyToken;
 
-module.exports = { signToken, verifyToken };

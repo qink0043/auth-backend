@@ -1,18 +1,18 @@
 const express = require('express')
 const cors = require('cors')
+const corsOptions = require("./config/cors");
 require('dotenv').config()
+const app = express()
 
-const authRoutes = require('./routes/auth')
+
+const authRoutes = require('./routes/user')
 const bgmProxyRoutes = require('./routes/bgmProxy')
 const animeRoutes = require('./routes/anime.js')
 
-const app = express()
-app.use(cors({
-  origin: '*', // 前端地址
-  credentials: true
-}))
-app.use(express.json())
 
+app.use(cors(corsOptions));
+app.use(express.json())
+app.use(express.urlencoded({ extended: false })); 
 app.use('/api/user', authRoutes)
 app.use('/api/bgm', bgmProxyRoutes)
 app.use('/api/anime', animeRoutes)
