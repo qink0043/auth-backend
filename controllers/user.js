@@ -7,11 +7,11 @@ const jwt = require("jsonwebtoken");
 const SECRET_KEY = require("../config/jwt");
 
 exports.register = async (req, res) => {
-  console.log('请求',req)
+  console.log('请求', req)
   const { userName, email, password } = req.body.params
   console.log(userName, email, password, "接收参数");
   if (!userName || !email || !password) {
-    res.send({
+    return res.status(401).send({
       code: 401,
       msg: "用户名、邮箱、密码为必填",
     });
@@ -29,7 +29,7 @@ exports.login = async function (req, res) {
   const { userName, password } = req.body
   // console.log(userName, password, "login");
   if (!userName || !password) {
-    res.send({
+    return res.status(401).send({
       code: 200,
       msg: "用户名密码不能为空",
     })
@@ -46,12 +46,11 @@ exports.login = async function (req, res) {
 
   const user = users[0];
   // console.log(user.password, bcrypt.hashSync(password, 10));
-  if (!bcrypt.compareSync(password, user.password)) {
-    res.send({
+  if (!(await bcrypt.compare(password, user.password))) {
+    return res.status(401).send({
       code: 401,
       msg: "密码错误",
     });
-    return;
   }
 
   const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: "24h" });
@@ -72,7 +71,7 @@ exports.getUserInfo = async (req, res) => {
   const [users, rowInfo] = await UserModel.getUserInfo(userId);
   if (users.length <= 0) {
     res.status(404).send({
-      code: 200,
+      code: 404,
       msg: "用户不存在",
     });
   }
