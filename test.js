@@ -5,10 +5,10 @@ const mysql = require("mysql2/promise");
   try {
     const connection = await mysql.createConnection({
       // host: "43.136.72.202",
-      host: "localhost",
+      host: "127.0.0.1",
       user: "root",
       password: "2004qcq310",
-      database: "vue_auth_login",
+      database: "vue_auth",
       port: 3306,
     });
 
