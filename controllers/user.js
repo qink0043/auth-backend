@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 
 const SECRET_KEY = require("../config/jwt");
 
-exports.register = async function (req, res) {
+exports.register = async (req, res) => {
   console.log('请求',req)
   const { userName, email, password } = req.body.params
   console.log(userName, email, password, "接收参数");
@@ -17,22 +17,22 @@ exports.register = async function (req, res) {
     });
   }
   const user = new UserModel({
-    userName: userName,
+    userName,
     email,
     password: await bcrypt.hash(password, 10),
   });
-  const userInfo = await user.register();
-  res.send(userInfo);
-};
+  const userInfo = await user.register()
+  res.send(userInfo)
+}
 
 exports.login = async function (req, res) {
-  const { userName, password } = req.body;
+  const { userName, password } = req.body
   // console.log(userName, password, "login");
   if (!userName || !password) {
     res.send({
       code: 200,
       msg: "用户名密码不能为空",
-    });
+    })
   }
 
   const [users, info] = await UserModel.login(userName);
