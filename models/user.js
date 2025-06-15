@@ -12,16 +12,7 @@ class User {
   async register() {
     const { userName, email, password } = this.userInfo
     const findUserSql = "SELECT * FROM user WHERE userName = ? OR email = ?"
-    const data = await db.query(findUserSql, (err, res) => {
-      if (err) {
-        res = {
-          warn: 'error',
-          msg: '获取数据错误'
-        }
-      } else {
-        [userName, email] = res[0]
-      }
-    })
+    const data = await db.execute(findUserSql, [userName, email])
     if (data[0].length > 0) {
       return {
         code: 402,
@@ -33,7 +24,7 @@ class User {
     // console.log(userName, email, password, time);  
     const addUserSql =
       "INSERT INTO user (userName, email, password, time) VALUES (?, ?, ?, ?)"
-    const Info = await db.execute(addUserSql, [
+    const Info = await db.query(addUserSql, [
       userName,
       email,
       password,
