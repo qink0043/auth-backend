@@ -26,11 +26,11 @@ exports.register = async (req, res) => {
 }
 
 exports.login = async function (req, res) {
-  const { userName, password } = req.body
+  const { userName, password } = req.body.param
   // console.log(userName, password, "login");
   if (!userName || !password) {
     return res.status(401).send({
-      code: 200,
+      code: 401,
       msg: "用户名密码不能为空",
     })
   }
