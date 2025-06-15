@@ -8,7 +8,7 @@ const SECRET_KEY = require("../config/jwt");
 
 exports.register = async function (req, res) {
   console.log('请求',req)
-  const { userName, email, password } = req.body;
+  const { userName, email, password } = req.body.params
   console.log(userName, email, password, "接收参数");
   if (!userName || !email || !password) {
     res.send({
