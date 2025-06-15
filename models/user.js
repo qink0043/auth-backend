@@ -21,7 +21,7 @@ class User {
     }
     const time = dayjs().format("YYYY-MM-DD HH:mm:ss");
 
-    console.log(userName, email, password, time);
+    // console.log(userName, email, password, time);
     const addUserSql =
       "INSERT INTO user (userName, email, password, time) VALUES (?, ?, ?, ?)";
     const Info = await db.execute(addUserSql, [

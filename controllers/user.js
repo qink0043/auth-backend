@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const SECRET_KEY = require("../config/jwt");
 
 exports.register = async function (req, res) {
-  console.log(req);
+  console.log('请求',req)
   const { userName, email, password } = req.body;
   console.log(userName, email, password, "接收参数");
   if (!userName || !email || !password) {
@@ -27,7 +27,7 @@ exports.register = async function (req, res) {
 
 exports.login = async function (req, res) {
   const { userName, password } = req.body;
-  console.log(userName, password, "login");
+  // console.log(userName, password, "login");
   if (!userName || !password) {
     res.send({
       code: 200,
@@ -45,7 +45,7 @@ exports.login = async function (req, res) {
   }
 
   const user = users[0];
-  console.log(user.password, bcrypt.hashSync(password, 10));
+  // console.log(user.password, bcrypt.hashSync(password, 10));
   if (!bcrypt.compareSync(password, user.password)) {
     res.send({
       code: 401,
@@ -68,7 +68,7 @@ exports.login = async function (req, res) {
 
 exports.getUserInfo = async (req, res) => {
   const userId = req.userId;
-  console.log(userId, "userId");
+  // console.log(userId, "userId");
   const [users, rowInfo] = await UserModel.getUserInfo(userId);
   if (users.length <= 0) {
     res.status(404).send({
