@@ -5,8 +5,8 @@ const verifyToken = require("../utils/jwt");
 
 const { register, login, getUserInfo } = require("../controllers/user");
 
-router.post("/api/register", register);
-router.post("/api/login", login);
-router.get("/api/userInfo", verifyToken, getUserInfo);
+router.post("/register", register);
+router.post("/login", login);
+router.get("/userInfo", verifyToken, getUserInfo);
 
 module.exports = router;

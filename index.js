@@ -5,7 +5,7 @@ require('dotenv').config()
 const app = express()
 
 
-const authRoutes = require('./routes/user')
+const userRoutes = require('./routes/user')
 const bgmProxyRoutes = require('./routes/bgmProxy')
 const animeRoutes = require('./routes/anime.js')
 
@@ -13,7 +13,7 @@ const animeRoutes = require('./routes/anime.js')
 app.use(cors(corsOptions));
 app.use(express.json())
 app.use(express.urlencoded({ extended: false })); 
-app.use('/api/user', authRoutes)
+app.use('/api/user', userRoutes)
 app.use('/api/bgm', bgmProxyRoutes)
 app.use('/api/anime', animeRoutes)
 
