@@ -10,7 +10,7 @@ class User {
    * @returns 注册结果
    */
   async register() {
-    const { userName, email, password } = this.userInfo
+    const { userName, email, password, avatar } = this.userInfo
     try {
       const findUserSql = "SELECT * FROM users WHERE userName = ? OR email = ?"
       const data = await db.execute(findUserSql, [userName, email])
@@ -21,15 +21,14 @@ class User {
         }
       }
       const time = dayjs().format("YYYY-MM-DD HH:mm:ss")
-
-      console.log(userName, email, password, time);
       const addUserSql =
-        "INSERT INTO users (userName, email, password, time) VALUES (?, ?, ?, ?)"
-      const Info = await db.query(addUserSql, [
+        "INSERT INTO users (userName, email, password, time, avatar) VALUES (?, ?, ?, ?, ?)"
+      await db.query(addUserSql, [
         userName,
         email,
         password,
         time,
+        avatar,
       ]);
 
       return {
@@ -41,7 +40,6 @@ class User {
         },
       };
     } catch (error) {
-      console.log(error)
       return {
         code: 500,
         msg: "注册失败",

@@ -9,4 +9,4 @@ router.post("/register", register);
 router.post("/login", login);
 router.get("/userInfo", verifyToken, getUserInfo);
 
-module.exports = router;
+module.exports = router

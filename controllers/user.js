@@ -1,15 +1,13 @@
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const bcrypt = require("bcrypt");
-
 const UserModel = require("../models/user");
-
 const jwt = require("jsonwebtoken");
-
 const SECRET_KEY = require("../config/jwt");
 
 exports.register = async (req, res) => {
-  console.log('请求', req)
   const { userName, email, password } = req.body.params
-  console.log(userName, email, password, "接收参数");
   if (!userName || !email || !password) {
     return res.status(401).send({
       code: 401,
@@ -45,7 +43,6 @@ exports.login = async function (req, res) {
   }
 
   const user = users[0];
-  // console.log(user.password, bcrypt.hashSync(password, 10));
   if (!(await bcrypt.compare(password, user.password))) {
     return res.status(401).send({
       code: 401,
@@ -65,9 +62,9 @@ exports.login = async function (req, res) {
   });
 };
 
+//获取用户信息
 exports.getUserInfo = async (req, res) => {
   const userId = req.userId;
-  // console.log(userId, "userId");
   const [users, rowInfo] = await UserModel.getUserInfo(userId);
   if (users.length <= 0) {
     res.status(404).send({
@@ -86,3 +83,47 @@ exports.getUserInfo = async (req, res) => {
   });
 };
 
+// 设置存储路径和文件名
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = path.join(__dirname, "../public/avatars");
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`;
+    cb(null, filename);
+  },
+});
+
+const upload = multer({ storage });
+
+exports.uploadAvatar = [
+  upload.single("avatar"), // 处理字段名为 avatar 的文件
+  async (req, res) => {
+    const userId = req.userId
+
+    if (!req.file) {
+      return res.status(400).send({
+        code: 400,
+        msg: "未上传头像文件",
+      })
+    }
+
+    const avatarUrl = `/public/avatars/${req.file.filename}`
+
+    // 更新用户头像字段
+    await UserModel.updateAvatar(userId, avatarUrl);
+
+    res.send({
+      code: 200,
+      msg: "头像上传成功",
+      data: {
+        avatar: avatarUrl,
+      },
+    });
+  },
+];

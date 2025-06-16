@@ -21,6 +21,7 @@
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.1",
     "mysql2": "^3.14.1",
     "p-queue": "^8.1.0",
     "puppeteer": "^24.9.0"
