@@ -25,8 +25,7 @@ exports.register = async (req, res) => {
 }
 
 exports.login = async function (req, res) {
-  const { userName, password } = req.body.param
-  // console.log(userName, password, "login");
+  const { userName, password } = req.body.params
   if (!userName || !password) {
     return res.status(401).send({
       code: 401,
@@ -51,7 +50,7 @@ exports.login = async function (req, res) {
     })
   }
 
-  const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: "24h" });
+  const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: "24h" })
   res.send({
     code: 200,
     msg: "登录成功",
@@ -62,7 +61,7 @@ exports.login = async function (req, res) {
       avatar: user.avatar,
     },
   })
-};
+}
 
 //获取用户信息
 exports.getUserInfo = async (req, res) => {
@@ -103,7 +102,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage })
 
 exports.uploadAvatar = [
   upload.single("avatar"), // 处理字段名为 avatar 的文件
@@ -117,7 +116,7 @@ exports.uploadAvatar = [
       })
     }
 
-    const avatarUrl = `/public/avatars/${req.file.filename}`
+    const avatarUrl = `http://124.71.198.227:3000/public/avatars/${req.file.filename}`
 
     // 更新用户头像字段
     await UserModel.updateAvatar(userId, avatarUrl)

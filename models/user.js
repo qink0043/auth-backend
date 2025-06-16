@@ -49,12 +49,17 @@ class User {
 
   static async login(userName) {
     const sql = "SELECT * FROM users WHERE userName = ?";
-    return db.execute(sql, [userName]);
+    return db.execute(sql, [userName])
   }
 
   static getUserInfo(userId) {
     const sql = "SELECT * FROM users WHERE id = ?";
     return db.execute(sql, [userId]);
+  }
+
+  static updateAvatar = async (userId, avatarUrl) => {
+    const sql = "UPDATE users SET avatar = ? WHERE id = ?"
+    return db.execute(sql, [avatarUrl, userId])
   }
 }
 
