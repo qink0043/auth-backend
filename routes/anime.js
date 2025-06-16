@@ -50,8 +50,15 @@ class EpisodeBean {
 }
 
 async function getHtml(url) {
-  let { data: html } = await axios.get(url)
-  return html
+  const res = await request.get(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0 Safari/537.36',
+      'Referer': 'http://www.iyinghua.io/',
+      'Accept-Language': 'zh-CN,zh;q=0.9'
+    },
+    timeout: 10000
+  })
+  return res.data
 }
 
 function getAnimeList(source) {
@@ -107,49 +114,59 @@ async function getVideoUrl(source) {
   return url
 }
 
-const videoUrl = 'http://www.iyinghua.io/v/5989-2.html'
-const searchUrl = "http://www.yinghuacd.com/search/海贼王/"
-
 
 router.get('/search', async (req, res) => {
-  const searchUrl = 'http://www.yinghuacd.com/search/' + req.query.keyword + '/'
-  const searchHtml = await getHtml(searchUrl).catch(() => {
-    console.log('searchHtml错误', searchHtml);
-  })
-  const searchData = await getSearchData(searchHtml).catch(() => {
-    console.log('searchData错误', searchData);
-  })
+  const searchUrl = 'search/' + req.query.keyword + '/'
+  console.log('searchUrl', searchUrl);
+  let searchHtml
+  try {
+    searchHtml = await getHtml(searchUrl)
+  } catch (error) {
+    console.log('searchHtml错误', searchHtml)
+  }
+  let searchData
+  try {
+    searchData = await getSearchData(searchHtml)
+  } catch (error) {
+    console.log('searchData错误', searchData)
+  }
   res.send(searchData)
 })
 
 router.get('/detail', async (req, res) => {
-  const detailUrl = 'http://www.iyinghua.io' + req.query.url
+  const detailUrl = req.query.url
+  let detailHtml
+  try {
+    detailHtml = await getHtml(detailUrl)
+  } catch (error) {
+    console.log('获取detailHtml错误', detailHtml)
+  }
 
-  const detailHtml = await getHtml(detailUrl).catch(() => {
-    console.log(detailUrl);
-    console.log('获取detailHtml错误', detailHtml);
-  })
-  const detailData = await getAnimeDetail(detailHtml).catch(() => {
-    console.log('获取detailData错误', detailData);
-  })
+  let detailData
+  try {
+    detailData = await getAnimeDetail(detailHtml)
+  } catch (error) {
+    console.log('获取detailData错误', detailData)
+  }
   res.send(detailData)
 })
 
 router.get('/video', async (req, res) => {
-  const videoUrl = 'http://www.iyinghua.io' + req.query.url
-  const videoHtml = await getHtml(videoUrl).catch(() => {
-    console.log('videoHtml错误', videoHtml);
-  })
-  const url = await getVideoUrl(videoHtml).catch(() => {
-    console.log('url错误', url);
-  })
+  const videoUrl = req.query.url
+  console.log('videoUrl', videoUrl);
+  let videoHtml
+  try {
+    videoHtml = await getHtml(videoUrl)
+  } catch (error) {
+    console.log('获取videoHtml错误', videoHtml)
+  }
+  let url
+  try {
+    url = await getVideoUrl(videoHtml)
+  } catch (error) {
+    console.log('获取url错误', url)
+  }
   res.send('https://tup.iyinghua.com/?vid=' + url + '$mp4')
-})
-
-router.get('/demo', async (req, res) => {
-  const videoUrl = 'https://www.233dm.com/anime/9894b11187bd24abe69c4d78/play/3/1.html'
-  const videoHtml = await getHtml(videoUrl)
-  res.send(videoHtml)
 })
 
 module.exports = router;
