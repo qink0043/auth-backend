@@ -118,9 +118,6 @@ exports.uploadAvatar = [
     }
 
     const avatarUrl = `http://124.71.198.227:3000/public/avatars/${req.file.filename}`
-    console.log('avatarUrl',avatarUrl);
-
-    
 
     // 更新用户头像字段
     await UserModel.updateAvatar(userId, avatarUrl)
