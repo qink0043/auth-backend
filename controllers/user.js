@@ -106,7 +106,7 @@ const upload = multer({ storage })
 exports.uploadAvatar = [
   upload.single("avatar"), // 处理字段名为 avatar 的文件
   async (req, res) => {
-    console.log(req);
+    console.log('userId',req.userId);
 
     const userId = req.userId
 
@@ -118,6 +118,9 @@ exports.uploadAvatar = [
     }
 
     const avatarUrl = `http://124.71.198.227:3000/public/avatars/${req.file.filename}`
+    console.log('avatarUrl',avatarUrl);
+
+    
 
     // 更新用户头像字段
     await UserModel.updateAvatar(userId, avatarUrl)
