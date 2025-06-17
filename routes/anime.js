@@ -117,7 +117,6 @@ async function getVideoUrl(source) {
 
 router.get('/search', async (req, res) => {
   const searchUrl = 'search/' + req.query.keyword + '/'
-  console.log('searchUrl', searchUrl);
   let searchHtml
   try {
     searchHtml = await getHtml(searchUrl)

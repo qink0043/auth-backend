@@ -18,7 +18,7 @@ exports.register = async (req, res) => {
     userName,
     email,
     password: await bcrypt.hash(password, 10),
-    avatar: "http://124.71.198.227:3000/public/avatars/defaultAvatar.jpg"
+    avatar: "http://124.71.198.227:3000/public/avatars/defaultAvatar.png"
   });
   const userInfo = await user.register()
   res.send(userInfo)
@@ -106,6 +106,8 @@ const upload = multer({ storage })
 exports.uploadAvatar = [
   upload.single("avatar"), // 处理字段名为 avatar 的文件
   async (req, res) => {
+    console.log(req);
+
     const userId = req.userId
 
     if (!req.file) {
